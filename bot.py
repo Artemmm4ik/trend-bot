@@ -33,13 +33,13 @@ async def cmd_scan(message: Message):
         await message.answer("❌ Ошибка: Не настроен YOUTUBE_API_KEY на сервере.")
         return
 
-    msg = await message.answer("⏳ Собираю топ-тренды из Google (это займет около 10 секунд)...")
+    msg = await message.answer("⏳ Собираю топ-тренды YouTube прямо сейчас (это займет около 10 секунд)...")
     
-    # Запускаем синхронный парсер в отдельном потоке, чтобы не блочить бота
-    trends = await asyncio.to_thread(get_trends, 'russia')
+    # Запускаем запрос к YouTube API в отдельном потоке, чтобы не блочить бота
+    trends = await asyncio.to_thread(get_trends, YOUTUBE_API_KEY, 'RU')
     
     if not trends:
-        await msg.edit_text("❌ Не удалось получить тренды. Возможно, Google заблокировал IP сервера. Попробуйте позже.")
+        await msg.edit_text("❌ Не удалось получить тренды YouTube. Проверьте правильность YOUTUBE_API_KEY и наличие квоты.")
         return
         
     await msg.edit_text(f"✅ Найдено {len(trends)} трендов. Анализирую конкуренцию на YouTube (берем топ-5)...")
